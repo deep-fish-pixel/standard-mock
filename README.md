@@ -1,4 +1,4 @@
-# es6-mock [中文](./README-CN.md)
+# standard-mock [中文](./README-CN.md)
 This tool makes mock data friendly and powerful.
 
 * Supports es6 import/export. import module lib, export json data.
@@ -16,14 +16,14 @@ This tool makes mock data friendly and powerful.
 ### Install
 Install with npm:
 
-`$ npm install --save-dev es6-mock`
+`$ npm install --save-dev standard-mock`
 
 ### Uses
 
 Config webpack.config.js or vue.config.js devServer property
 
 ```javascript
-const es6Mock = require('es6-mock');
+const es6Mock = require('standard-mock');
 
 module.exports =  {
   devServer: {
@@ -33,7 +33,7 @@ module.exports =  {
         dir: './mock',
         // Url root path 
         path: '/api',
-        // Add express bodyParser
+        // Add express json bodyParser
         app: app,
         // Set Hot Reload
         hotServer: server
@@ -49,7 +49,7 @@ module.exports =  {
 // Import lib
 import path from 'path';
 import fs from 'fs';
-import { sleep, validate, request } from 'es6-mock';
+import { sleep, validate, request } from 'standard-mock';
 
 // Import other mock datas
 import test1 from './test1';

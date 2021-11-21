@@ -3,7 +3,7 @@ export default async function ({
   validate,
   delay
 }) {
-  // 延迟200ms
+  // 延迟ms
   await delay(200);
 
   // 校验数据

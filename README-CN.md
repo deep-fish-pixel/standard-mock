@@ -1,4 +1,4 @@
-# es6-mock
+# standard-mock
 mock数据更友好和强大
 
 * 支持 es6 import/export, import导入库，export输出数据对象
@@ -16,14 +16,14 @@ mock数据更友好和强大
 ### Install
 Install with npm:
 
-`$ npm install --save-dev es6-mock`
+`$ npm install --save-dev standard-mock`
 
 ### Uses
 
 在webpack.config.js或vue.config.js的devServer中配置
 
 ```javascript
-const es6Mock = require('es6-mock');
+const es6Mock = require('standard-mock');
 
 module.exports =  {
   devServer: {
@@ -33,7 +33,7 @@ module.exports =  {
         dir: './mock',
         // url访问根路径名称 
         path: '/api',
-        // add express bodyParser
+        // add express json bodyParser
         app: app,
         // 添加热加载
         hotServer: server
@@ -49,7 +49,7 @@ module.exports =  {
 // import 导入工具库
 import path from 'path';
 import fs from 'fs';
-import { sleep, validate, request } from 'es6-mock';
+import { sleep, validate, request } from 'standard-mock';
 
 // import 导入其他mock模块
 import test1 from './test1';
