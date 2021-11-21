@@ -1,8 +1,8 @@
 # standard-mock
 mock数据更友好和强大
 
-* 支持 es6 import/export, import导入库，export输出数据对象
-* 支持 request、response、delay(延迟响应ms)、validate(验证 参数和请求方式)
+* 支持 es6 import/export, import导入库，export输出函数和对象
+* 使用mock回调输出mock数据，参数对象属性：request、response、delay(延迟响应ms)、validate(验证 参数和请求方式)
 * 使用 validate 进行params及method校验
   
     params校验规则参考：[node-input-validator](https://www.npmjs.com/package/node-input-validator)
@@ -49,36 +49,46 @@ module.exports =  {
 // import 导入工具库
 import path from 'path';
 import fs from 'fs';
-import { sleep, validate, request } from 'standard-mock';
-
 // import 导入其他mock模块
 import test1 from './test1';
 import test2 from './test2';
 
-// 延迟500ms
-delay(500);
+export default async function ({
+  request,
+  validate,
+  delay
+}) {
+  // 延迟ms
+  await delay(400);
 
-// 校验数据（如果校验不通过，则返回详细的校验错误作为请求响应）
-validate({
-    // 参数校验类型、格式等及是否必选
+  // 校验数据
+  await validate({
     param: {
       name: 'required|string',
       id: 'required|integer'
     },
     // 请求方法校验
-    method: 'get'
-});
+    method: 'get|post'
+  });
 
-// 校验通过后，则以导出mock数据作为请求响应
-export default {
+  // 导出mock数据
+  return {
     // 使用mockjs数据模板
     'code|1-10': '0',
     data: {
       "switch|1-2": true,
       name: 'test03.js',
       // 组装其他mock数据，数据量大的时候非常有用
-      test1,
-      test2,
+      test1: await test1({
+        request,
+        validate,
+        delay
+      }),
+      test2: await test2({
+        request,
+        validate,
+        delay
+      }),
       // 获取请求get参数
       param: request.query,
       // 获取请求post参数
@@ -87,6 +97,7 @@ export default {
       existTest1: fs.existsSync(path.join(__dirname, 'test1.js')),
       existTest0: fs.existsSync(path.join(__dirname, 'no-exist.js'))
     }
+  };
 };
 ```
 

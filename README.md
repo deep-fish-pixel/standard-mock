@@ -1,8 +1,8 @@
 # standard-mock [中文](./README-CN.md)
 This tool makes mock data friendly and powerful.
 
-* Supports es6 import/export. import module lib, export json data.
-* Supports request、response、delay(delay response time)、validate(validate request params and method)
+* Supports es6 import/export. import module lib, export function or object.
+* Use mock function callback mocks data, and callback's param: request、response、delay(delay response time)、validate(validate request params and method)
 * Use Validate validates request params type and method
 
   Params rule references：[node-input-validator](https://www.npmjs.com/package/node-input-validator)
@@ -49,36 +49,47 @@ module.exports =  {
 // Import lib
 import path from 'path';
 import fs from 'fs';
-import { sleep, validate, request } from 'standard-mock';
-
 // Import other mock datas
 import test1 from './test1';
 import test2 from './test2';
 
-// Delay response 500ms
-delay(500);
+export default async function ({
+    request,
+    validate,
+    delay
+  }) {
+  // Delay response 500ms
+  await delay(500);
 
-// Validate request （If validate failed, will return validate messages as response）
-validate({
+  // Validate request （If validate failed, will return validate messages as response）
+  await validate({
     // Validate param required、 type or format
     param: {
-        name: 'required|string',
-        id: 'required|integer'
+      name: 'required|string',
+      id: 'required|integer'
     },
     // Validate request method
     method: 'get|post'
-});
+  });
 
-// Export mock data，if validate pass
-export default {
+  // Export mock data，if validate pass
+  return {
     // Use mockjs data template
     'code|1-10': '0',
     data: {
       "switch|1-2": true,
       name: 'test03.js',
       // Use other mock data. This will very useful in large data content
-      test1,
-      test2,
+      test1: await test1({
+        request,
+        validate,
+        delay
+      }),
+      test2: await test2({
+        request,
+        validate,
+        delay
+      }),
       // Get request get param
       param: request.query,
       // Get request post param
@@ -87,6 +98,7 @@ export default {
       existTest1: fs.existsSync(path.join(__dirname, 'test1.js')),
       existTest0: fs.existsSync(path.join(__dirname, 'no-exist.js'))
     }
+  };
 };
 ```
 
